@@ -1,4 +1,4 @@
-package com.example.lab01;
+package com.example.lab01; // Zaharov 493
 
 import android.content.Context;
 import android.database.Cursor;

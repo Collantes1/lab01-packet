@@ -19,6 +19,7 @@ import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
@@ -29,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     DatagramSocket socket;
     TextView tv;
 
-    @Override
+    @Override // Zaharov 493
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -45,12 +46,8 @@ public class MainActivity extends AppCompatActivity {
             SocketAddress local_address = new InetSocketAddress(local_network, 9000);
             // создание сокета
             socket = new DatagramSocket(local_address);
-            socket.setBroadcast(true);
-
-        } catch (UnknownHostException | SocketException e)
-        {
-            e.printStackTrace();
-        }
+            socket.setBroadcast(true); } catch (UnknownHostException | SocketException e)
+        {e.printStackTrace();}
 
         // экземпляр класса
         Runnable receiver = new Runnable() {
@@ -80,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.e("Test", s);
                     runOnUiThread(() -> {
                         String text = tv.getText().toString();
-                        text += "\n" + m.toString();
+                        text += "\n" + "IP: " + m.IP + ":" + m.Port + "\n" + "Sender: " + m.Name + "\n" + "Message: " + m.Text + "\n" + "****************************************";
                         tv.setText(text);
                     });
 
@@ -115,7 +112,7 @@ public class MainActivity extends AppCompatActivity {
         m.Name = name;
         m.Text = message;
 
-        byte[] send_buffer = m.msqB();
+        byte[] send_buffer = m.Messages();
 
         try
         {
@@ -138,9 +135,10 @@ public class MainActivity extends AppCompatActivity {
                 {
                     socket.send(send_packet);
                     g.Dialogs.OnSaveDialogs(m);
-                    String text = tv.getText().toString();
 
                     runOnUiThread(() -> {
+                        String text = tv.getText().toString();
+                        text += "\n" + "IP: " + m.IP + ":" + m.Port + "\n" + "Sender: " + m.Name + "\n" + "Message: " + m.Text + "\n" + "****************************************";
                         tv.setText(text);
                     });
                 }
@@ -153,6 +151,12 @@ public class MainActivity extends AppCompatActivity {
         // создание потока
         Thread t = new Thread(r);
         t.start();
+
+    }
+
+    public void onDelete(View v)
+    {
+        tv.setText(null);
     }
 }
 

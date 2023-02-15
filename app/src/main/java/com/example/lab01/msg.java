@@ -1,20 +1,20 @@
-package com.example.lab01;
+package com.example.lab01; // Zaharov 493
 
 import java.nio.charset.StandardCharsets;
 
 public class msg {
     public String IP;
-    public String Port;
     public String Name;
+    public String Port;
     public String Text;
 
-    public byte[] msqB()
+    public byte[] Messages()
     {
-        byte[] buf = (this.IP + "%" + this.Port + "%" + this.Name + "%" + this.Text).getBytes(StandardCharsets.UTF_8);
-        return buf;
+        byte[] buffer = (this.IP + "%" + this.Port + "%" + this.Name + "%" + this.Text).getBytes(StandardCharsets.UTF_8);
+        return buffer;
     }
     public String toString()
     {
-        return "IP: " + this.IP + ":" + this.Port + "\n" + "Sender: " + this.Name + "\n" + "Message: " + this.Text + "\n" + "****************************************";
+        return this.Name + ": " + this.Text + "\n" + "IP: "+ this.IP + ":"+this.Port;
     }
 }
